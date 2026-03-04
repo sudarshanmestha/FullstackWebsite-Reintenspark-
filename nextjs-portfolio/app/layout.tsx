@@ -43,13 +43,13 @@ export default function RootLayout({
       )}
     >
 <body className={cx(
-  'min-h-screen flex flex-col overflow-x-hidden',
-  /* GRADIENT LOGIC:
-     - from-white from-0%: Starts white at the absolute top edge.
-     - via-[#051616] via-15%: Forces the transition to dark teal to finish by 15% of the page height.
-     - to-black to-100%: Ends in pure black at the bottom.
+  'min-h-screen flex flex-col overflow-x-hidden text-white',
+  /* SCIENTIFIC GRADIENT:
+     - from-[#021b1b]: Starts with Dark Forest-Teal to make the neon logo pop.
+     - via-[#051616]: Transitions into a deeper, darker teal.
+     - to-black: Ends in solid black at the bottom for maximum depth.
   */
-  'bg-[#051616] bg-gradient-to-b from-white from-0% via-[#051616] via-15% to-black to-100%'
+  'bg-black bg-gradient-to-b from-[#021b1b] via-[#051616] to-black'
 )}>
         <AuthProvider>
           <Navbar />

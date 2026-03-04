@@ -67,41 +67,47 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[60] transform-gpu transition-all duration-300">
-      <div className={`mx-auto transition-all duration-300 ease-in-out max-w-8xl px-4 ${isScrolled ? 'mt-2' : 'mt-4'} sm:px-6 lg:px-8`}>
-        <div className={`
-                  flex w-full items-center transform-gpu relative transition-all duration-500 flex-row justify-between
-                  border-b backdrop-blur-2xl
-                  ${isScrolled 
-                    ? 'bg-white/60 border-emerald-200/50 px-6 py-2 rounded-[111px] shadow-[0_10px_40px_rgba(255,255,255,0.8)]' 
-                    : 'bg-transparent border-white/10 px-6 py-3 rounded-none shadow-none'}
-                `}>
-          
-          {/* Logo Area */}
-          <Link href="/" className="flex-shrink-0 z-10 relative">
-            <img 
-              alt="Reintenspark logo" 
-              src="/icons/reinternspark-logo.svg" 
-              width="140"
-              height="180"
-              className={`transition-all duration-300 object-contain
-                ${isScrolled ? 'max-w-[85px] lg:scale-100' : 'max-w-[100px] lg:max-w-none lg:scale-110 lg:origin-left'}`} 
-              style={{ width: '140px', height: 'auto' }}
-            />
-          </Link>
+ <header className="fixed inset-x-0 top-0 z-[60] transform-gpu transition-all duration-300">
+  {/* REMOVED max-w-8xl to allow full screen width */}
+  <div className={`w-full transition-all duration-300 ease-in-out ${isScrolled ? 'mt-0' : 'mt-0'}`}>
+    <div className={`
+      flex w-full items-center transform-gpu relative transition-all duration-500 flex-row justify-between
+      border-b backdrop-blur-2xl
+      /* Updated horizontal padding for edge-to-edge feel */
+      px-4 sm:px-8 lg:px-12
+      ${isScrolled 
+        ? 'bg-[#021b1b]/80 border-[#39FF14]/20 py-2 shadow-lg' 
+        : 'bg-transparent border-white/10 py-5 shadow-none'}
+    `}>
+      
+{/* Logo Area - Zoom Effect Implementation */}
+<Link href="/" className="flex-shrink-0 z-10 relative">
+  <img 
+    alt="Reintenspark logo" 
+    src="/icons/reinternspark-logo.svg" 
+    width="240"
+    height="180"
+    className={`transition-all duration-700 ease-out object-contain
+      ${isScrolled 
+        ? 'max-w-[140px] scale-125 opacity-90' 
+        : 'max-w-[140px] scale-155 lg:scale-200 origin-left drop-shadow-[0_0_15px_rgba(57,255,20,0.3)]'
+      }`} 
+    style={{ height: 'auto' }}
+  />
+</Link>
 
-          {/* Navigation Links and Contact Button */}
-          <nav className="hidden lg:flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
-            {navItems.map((item) => (
-              <NavLink key={item.path} item={item} pathname={pathname} />
-            ))}
-            <ContactButton path="/contact" />
-          </nav>
+      {/* Navigation Links and Contact Button - Stays centered relative to the full width */}
+      <nav className="hidden lg:flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
+        {navItems.map((item) => (
+          <NavLink key={item.path} item={item} pathname={pathname} />
+        ))}
+        <ContactButton path="/contact" />
+      </nav>
 
-          {/* Spacer for layout balance */}
-          <div className="hidden lg:block w-[140px]"></div>
-        </div>
-      </div>
-    </header>
+      {/* Spacer for layout balance */}
+      <div className="hidden lg:block w-[140px]"></div>
+    </div>
+  </div>
+</header>
   );
 }
