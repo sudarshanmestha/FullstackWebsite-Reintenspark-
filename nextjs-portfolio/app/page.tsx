@@ -31,7 +31,7 @@ export default function Page() {
      -------------------------------------------------------------- */
   return (
     <>
-      <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      <div className="min-h-screen selection:bg-[#39FF14]/30 scroll-smooth text-white overflow-x-hidden">
 
         {/* ============================================= */}
         {/* 1. ABOUT MY PROFILE (TOP SECTION) */}
