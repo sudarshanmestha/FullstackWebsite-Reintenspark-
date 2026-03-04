@@ -1,0 +1,90 @@
+@base_url = http://127.0.0.1:8001
+
+### Register User
+POST {{base_url}}/api/auth/registration/
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password1": "TestPass123!",
+  "password2": "TestPass123!"
+}
+
+### Login with JWT
+# @name login
+POST http://127.0.0.1:8001/api/auth/login/
+Content-Type: application/json
+
+{
+  "username": "justpython",
+  "password": "Sudu1957!"
+}
+
+### Get Current User (CORRECT ENDPOINT)
+GET {{base_url}}/api/auth/user/
+Authorization: Bearer {{login.response.body.access}}
+
+### Update User Profile
+PUT {{base_url}}/api/auth/user/
+Authorization: Bearer {{login.response.body.access}}
+Content-Type: application/json
+
+{
+  "first_name": "Just",
+  "last_name": "Python"
+}
+
+### Logout (needs Bearer token)
+POST {{base_url}}/api/auth/logout/
+Authorization: Bearer {{login.response.body.access}}
+Content-Type: application/json
+
+{}
+
+### Change Password (CORRECT ENDPOINT)
+POST {{base_url}}/api/auth/password/change/
+Authorization: Bearer {{login.response.body.access}}
+Content-Type: application/json
+
+{
+  "old_password": "Sudu1957!",
+  "new_password1": "NewPass123!",
+  "new_password2": "NewPass123!"
+}
+
+### Refresh Token
+POST {{base_url}}/api/auth/token/refresh/
+Content-Type: application/json
+
+{
+  "refresh": "{{login.response.body.refresh}}"
+}
+
+### Verify Token
+POST {{base_url}}/api/auth/token/verify/
+Content-Type: application/json
+
+{
+  "token": "{{login.response.body.access}}"
+}
+
+### Password Reset Request
+POST {{base_url}}/api/auth/password/reset/
+Content-Type: application/json
+
+{
+  "email": "justpython.india@gmail.com"
+}
+
+
+### reset confirm
+POST http://127.0.0.1:8001/api/auth/password/reset/confirm/
+Content-Type: application/json
+
+{
+    "new_password1": "",
+    "new_password2": "",
+    "uid": "",
+    "token": ""
+}

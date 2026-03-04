@@ -1,0 +1,7 @@
+rav
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+dj-rest-auth
+dj-rest-auth[with_social]
+Pillow

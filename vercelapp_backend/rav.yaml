@@ -1,0 +1,14 @@
+description: Django project tasks via rav
+scripts:
+ server:
+  - cd dapp && python manage.py runserver 8001
+
+ makemigrations:
+  - cd dapp && python manage.py makemigrations
+
+ migrate:
+  - cd dapp && python manage.py migrate 
+
+ shell:
+  - cd dapp && python manage.py shell
+  
