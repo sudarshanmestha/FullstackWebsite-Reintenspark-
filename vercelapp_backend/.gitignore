@@ -141,3 +141,16 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# Virtual Environment (your 'vbenv' folder)
+vbenv/
+venv/
+env/
+.venv/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Local Environment Variables
+.env
