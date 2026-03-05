@@ -3,111 +3,122 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import Theme from './Theme';
+import User from './Header/User';
 
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Projects', path: '/projects' },
   { name: 'Hardware', path: '/hardware' },
   { name: 'Ai-Tools', path: '/Ai-Tools' },
-  { name: 'More', path: '/more' },
   { name: 'R&D', path: '/rd' },
   { name: 'Careers', path: '/careers' },
 ];
 
-// Function for standard navigation link styles
-// Function for standard navigation link styles
-function NavLink({ item, pathname }) {
-  const isActive = pathname === item.path;
-  
-  return (
-    <Link
-      href={item.path}
-      className={`px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300 rounded-full border
-        /* Default State: Gray text, subtle border */
-        ${isActive 
-          ? 'text-[#39FF14] border-[#39FF14]/50 bg-[#39FF14]/5' 
-          : 'text-[#39FF14] border-gray-700 bg-transparent-shadow-[0_0_25px_rgba(57,255,20,0.8)'}
-        
-        /* HOVER STATE: This is where the block turns green and text turns black */
-        hover:bg-[#39FF14] 
-        hover:text-black 
-        hover:border-[#39FF14] 
-        hover:shadow-[0_0_25px_rgba(57,255,20,0.8)]
-        hover:scale-105
-      `}
-    >
-      {item.name}
-    </Link>
-  );
-}
-
-// Function for the 'Contact' button style
-function ContactButton({ path }) {
-  return (
-    <Link
-      href={path}
-      className="px-8 py-3.5 text-xs font-bold uppercase tracking-widest text-[#0c2a2a] bg-[#39FF14] rounded-full shadow-[0_0_20px_rgba(57,255,20,0.7)] transition-all hover:shadow-[0_0_25px_rgba(57,255,20,0.9)]"
-    >
-      CONTACT
-    </Link>
-  );
-}
-
-
 export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [visibleNav, setVisibleNav] = useState(false);
+  
+  const user = null; 
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
- <header className="fixed inset-x-0 top-0 z-[60] transform-gpu transition-all duration-300">
-  {/* REMOVED max-w-8xl to allow full screen width */}
-  <div className={`w-full transition-all duration-300 ease-in-out ${isScrolled ? 'mt-0' : 'mt-0'}`}>
-    <div className={`
-      flex w-full items-center transform-gpu relative transition-all duration-500 flex-row justify-between
-      border-b backdrop-blur-2xl
-      /* Updated horizontal padding for edge-to-edge feel */
-      px-4 sm:px-8 lg:px-12
-      ${isScrolled 
-        ? 'bg-[#021b1b]/80 border-[#39FF14]/20 py-2 shadow-lg' 
-        : 'bg-transparent border-white/10 py-5 shadow-none'}
-    `}>
-      
-{/* Logo Area - Zoom Effect Implementation */}
-<Link href="/" className="flex-shrink-0 z-10 relative">
-  <img 
-    alt="Reintenspark logo" 
-    src="/icons/reinternspark-logo.svg" 
-    width="240"
-    height="180"
-    className={`transition-all duration-700 ease-out object-contain
-      ${isScrolled 
-        ? 'max-w-[140px] scale-125 opacity-90' 
-        : 'max-w-[140px] scale-155 lg:scale-200 origin-left drop-shadow-[0_0_15px_rgba(57,255,20,0.3)]'
-      }`} 
-    style={{ height: 'auto' }}
-  />
-</Link>
+    <header className={`fixed inset-x-0 top-0 z-[60] transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-white/80 dark:bg-[#021b1b]/90 backdrop-blur-2xl border-b border-neutral-200 dark:border-[#39FF14]/10 shadow-sm' 
+        : 'bg-transparent'
+    }`}>
+      <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
+        <div className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? 'py-3' : 'py-5'}`}>
+          
+          {/* LOGO AREA WITH PERMANENT BLUR SLOPE */}
+          <div className="relative flex-shrink-0 pr-8">
+            <div className={`absolute -inset-x-6 -inset-y-4 -z-10 
+              bg-white/60 dark:bg-white/10 
+              blur-2xl transition-all duration-500
+              rounded-[30%_70%_70%_30%/50%_30%_70%_50%]
+              ${isScrolled ? 'opacity-40 scale-90' : 'opacity-80 scale-100'}
+            `} />
 
-      {/* Navigation Links and Contact Button - Stays centered relative to the full width */}
-      <nav className="hidden lg:flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
-        {navItems.map((item) => (
-          <NavLink key={item.path} item={item} pathname={pathname} />
-        ))}
-        <ContactButton path="/contact" />
-      </nav>
+            <Link href="/" className="relative block">
+              <Image 
+                alt="Reintenspark logo" 
+                src="/icons/reinternspark-logo.svg" 
+                width={isScrolled ? 150 : 190}
+                height={55}
+                className="object-contain transition-all duration-500 dark:brightness-100 brightness-90"
+                priority
+              />
+            </Link>
+          </div>
 
-      {/* Spacer for layout balance */}
-      <div className="hidden lg:block w-[140px]"></div>
-    </div>
-  </div>
-</header>
+          {/* NAVIGATION */}
+          <div className={`
+            fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 transition-transform lg:static lg:flex lg:flex-row lg:bg-transparent lg:inset-auto lg:translate-x-0
+            ${visibleNav ? 'translate-x-0 bg-white dark:bg-black' : 'translate-x-full lg:translate-x-0'}
+          `}>
+            <nav className="flex flex-col lg:flex-row items-center gap-1 lg:gap-3">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={`
+                    px-5 py-2.5 text-sm font-bold uppercase tracking-[0.15em] transition-all rounded-full
+                    ${pathname === item.path 
+                      ? 'text-black bg-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.5)]' 
+                      : 'text-neutral-600 dark:text-white/80 hover:text-[#39FF14] hover:bg-neutral-100 dark:hover:bg-white/5'}
+                  `}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* RIGHT ACTIONS */}
+          <div className="flex items-center gap-4 lg:pl-8">
+            <div className="hidden sm:block border-r border-neutral-200 dark:border-white/10 pr-4">
+              <Theme className="theme-big" />
+            </div>
+
+            {/* SEARCH BUTTON */}
+            <Link 
+              href="/search"
+              className="hidden xl:flex items-center gap-2 px-5 py-2.5 border border-neutral-200 dark:border-white/10 rounded-full text-xs font-bold uppercase tracking-widest text-neutral-700 dark:text-white hover:border-[#39FF14]/50 transition-all"
+            >
+              <span className="text-[#39FF14]">Search</span>
+            </Link>
+
+            {user ? (
+              <User user={user} />
+            ) : (
+              <Link
+                href="/contact"
+                className="px-7 py-3 bg-[#39FF14] text-black text-xs font-black uppercase tracking-widest rounded-full shadow-lg hover:shadow-[#39FF14]/40 hover:scale-105 transition-all"
+              >
+                Contact
+              </Link>
+            )}
+
+            {/* BURGER MENU */}
+            <button
+              className="lg:hidden flex flex-col gap-1.5 p-2"
+              onClick={() => setVisibleNav(!visibleNav)}
+            >
+              <div className={`w-7 h-0.5 transition-all ${visibleNav ? 'rotate-45 translate-y-2 bg-black dark:bg-white' : 'bg-neutral-800 dark:bg-white'}`} />
+              <div className={`w-7 h-0.5 transition-all ${visibleNav ? 'opacity-0' : 'bg-neutral-800 dark:bg-white'}`} />
+              <div className={`w-7 h-0.5 transition-all ${visibleNav ? '-rotate-45 -translate-y-2 bg-black dark:bg-white' : 'bg-neutral-800 dark:bg-white'}`} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
