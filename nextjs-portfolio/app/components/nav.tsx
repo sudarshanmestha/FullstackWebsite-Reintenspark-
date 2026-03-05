@@ -38,22 +38,24 @@ export default function Navbar() {
       <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16">
         <div className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? 'py-3' : 'py-5'}`}>
           
-          {/* LOGO AREA WITH PERMANENT BLUR SLOPE */}
-          <div className="relative flex-shrink-0 pr-8">
+          {/* LOGO AREA WITH REFINED BLUR SLOPE */}
+          <div className="relative flex-shrink-0 pr-10 flex items-center justify-center min-w-[240px]">
+            {/* THE BLUR SLOPE TOUCH */}
             <div className={`absolute -inset-x-6 -inset-y-4 -z-10 
-              bg-white/60 dark:bg-white/10 
+              bg-white/60 dark:bg-white/5 
               blur-2xl transition-all duration-500
               rounded-[30%_70%_70%_30%/50%_30%_70%_50%]
-              ${isScrolled ? 'opacity-40 scale-90' : 'opacity-80 scale-100'}
+              ${isScrolled ? 'opacity-30 scale-90' : 'opacity-80 scale-100'}
             `} />
 
-            <Link href="/" className="relative block">
+            <Link href="/" className="relative z-10 block">
               <Image 
                 alt="Reintenspark logo" 
                 src="/icons/reinternspark-logo.svg" 
-                width={isScrolled ? 150 : 190}
-                height={55}
-                className="object-contain transition-all duration-500 dark:brightness-100 brightness-90"
+                // INCREASED SIZES (approx 30% larger)
+                width={isScrolled ? 240 : 300}
+                height={75}
+                className="object-contain transition-all duration-500 dark:brightness-100 brightness-90 active:scale-95"
                 priority
               />
             </Link>
@@ -88,7 +90,6 @@ export default function Navbar() {
               <Theme className="theme-big" />
             </div>
 
-            {/* SEARCH BUTTON */}
             <Link 
               href="/search"
               className="hidden xl:flex items-center gap-2 px-5 py-2.5 border border-neutral-200 dark:border-white/10 rounded-full text-xs font-bold uppercase tracking-widest text-neutral-700 dark:text-white hover:border-[#39FF14]/50 transition-all"
@@ -107,7 +108,6 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* BURGER MENU */}
             <button
               className="lg:hidden flex flex-col gap-1.5 p-2"
               onClick={() => setVisibleNav(!visibleNav)}

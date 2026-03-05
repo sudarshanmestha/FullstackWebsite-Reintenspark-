@@ -57,7 +57,7 @@ export default function RootLayout({
                   pt-24 provides space for the Navbar.
                   The background here is transparent so the body color shows through.
               */}
-              <div className="w-full max-w-8xl px-4 sm:px-6 lg:px-8 pt-24 pb-12 transition-all duration-300">
+              <div className="w-full max-w-8xl pt-24 pb-12 transition-all duration-300">
                 {children}
               </div>
             </main>
