@@ -1,28 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { LogOut, User } from 'lucide-react';
 
-export default function Nav() {
-    const { user, isAuthenticated, logout } = useAuth();
-    const [showUserMenu, setShowUserMenu] = useState(false);
-    const router = useRouter();
-  
-    const handleLogout = async () => {
-      await logout();
-      router.push('/');
-      
 export default function ProfilePage() {
   const { user, updateUser, loading, isAuthenticated } = useAuth();
   const router = useRouter();
   
   const [formData, setFormData] = useState({
-    first_name: user?.first_name || '',
-    last_name: user?.last_name || '',
-    email: user?.email || '',
+    first_name: '',
+    last_name: '',
+    email: '',
   });
   
   const [passwordData, setPasswordData] = useState({
@@ -35,13 +25,15 @@ export default function ProfilePage() {
   const [error, setError] = useState('');
   const [updating, setUpdating] = useState(false);
 
-  React.useEffect(() => {
+  // Redirect if not authenticated
+  useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push('/auth/login');
     }
   }, [loading, isAuthenticated, router]);
 
-  React.useEffect(() => {
+  // Sync form data when user loads
+  useEffect(() => {
     if (user) {
       setFormData({
         first_name: user.first_name || '',
@@ -148,7 +140,7 @@ export default function ProfilePage() {
                   type="text"
                   value={formData.first_name}
                   onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                  className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                  className="w-full px-4 py-2 rounded border focus:outline-none"
                   style={{
                     backgroundColor: '#202225',
                     borderColor: '#3a3a3a',
@@ -165,7 +157,7 @@ export default function ProfilePage() {
                   type="text"
                   value={formData.last_name}
                   onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                  className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                  className="w-full px-4 py-2 rounded border focus:outline-none"
                   style={{
                     backgroundColor: '#202225',
                     borderColor: '#3a3a3a',
@@ -183,7 +175,7 @@ export default function ProfilePage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                className="w-full px-4 py-2 rounded border focus:outline-none"
                 style={{
                   backgroundColor: '#202225',
                   borderColor: '#3a3a3a',
@@ -221,7 +213,7 @@ export default function ProfilePage() {
                 type="password"
                 value={passwordData.old_password}
                 onChange={(e) => setPasswordData({ ...passwordData, old_password: e.target.value })}
-                className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                className="w-full px-4 py-2 rounded border focus:outline-none"
                 style={{
                   backgroundColor: '#202225',
                   borderColor: '#3a3a3a',
@@ -239,7 +231,7 @@ export default function ProfilePage() {
                 type="password"
                 value={passwordData.new_password1}
                 onChange={(e) => setPasswordData({ ...passwordData, new_password1: e.target.value })}
-                className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                className="w-full px-4 py-2 rounded border focus:outline-none"
                 style={{
                   backgroundColor: '#202225',
                   borderColor: '#3a3a3a',
@@ -257,7 +249,7 @@ export default function ProfilePage() {
                 type="password"
                 value={passwordData.new_password2}
                 onChange={(e) => setPasswordData({ ...passwordData, new_password2: e.target.value })}
-                className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
+                className="w-full px-4 py-2 rounded border focus:outline-none"
                 style={{
                   backgroundColor: '#202225',
                   borderColor: '#3a3a3a',
