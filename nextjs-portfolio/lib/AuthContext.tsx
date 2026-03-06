@@ -21,14 +21,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('access_token');
-      if (token) {
-        try {
-          const userData = await api.getCurrentUser();
-          setUser(userData);
-        } catch (error) {
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
+      // Check if we are in the browser before touching localStorage
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('access_token');
+        if (token) {
+          try {
+            const userData = await api.getCurrentUser();
+            setUser(userData);
+          } catch (error) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+          }
         }
       }
       setLoading(false);
@@ -39,15 +42,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (data: LoginData) => {
     const response = await api.login(data);
-    localStorage.setItem('access_token', response.access);
-    localStorage.setItem('refresh_token', response.refresh);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('access_token', response.access);
+      localStorage.setItem('refresh_token', response.refresh);
+    }
     setUser(response.user);
   };
 
   const register = async (data: RegisterData) => {
     const response = await api.register(data);
-    localStorage.setItem('access_token', response.access);
-    localStorage.setItem('refresh_token', response.refresh);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('access_token', response.access);
+      localStorage.setItem('refresh_token', response.refresh);
+    }
     setUser(response.user);
   };
 
@@ -57,8 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+      }
       setUser(null);
     }
   };
