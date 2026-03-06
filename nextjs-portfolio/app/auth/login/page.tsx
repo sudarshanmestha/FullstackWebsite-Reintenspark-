@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/contexts/AuthContext';
+import { useAuth } from "@/lib/AuthContext"; // Use the @ alias
 import Link from 'next/link';
 
 export default function LoginPage() {
