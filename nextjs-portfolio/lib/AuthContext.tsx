@@ -72,9 +72,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const updateUser = async (data: Partial<User>) => {
-    const updatedUser = await api.updateProfile(data);
-    setUser(updatedUser);
+const updateUser = async (data: Partial<User>) => {
+    try {
+      const updatedUser = await api.updateProfile(data);
+      setUser(updatedUser);
+    } catch (error) {
+      console.error('Failed to update user:', error);
+      throw error; // Re-throw so the UI (Profile Page) can show an error message
+    }
   };
 
   return (
