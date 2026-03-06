@@ -103,8 +103,7 @@ const updateUser = async (data: Partial<User>) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  // If the context is missing (common during the isolated static build phase), 
-  // return a safe fallback instead of throwing a hard error.
+  // This prevents the "Prerender Error" on Vercel
   if (context === undefined) {
     return {
       user: null,
