@@ -80,10 +80,18 @@ useEffect(() => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  // This is the line throwing your build error
+  // If the context is missing (like during a build), 
+  // return a safe empty object instead of throwing an error.
   if (context === undefined) {
-    // If we are currently building/prerendering, return a null state instead of crashing
-    return { user: null, tokens: null, isLoading: true, isAuthenticated: false };
+    return {
+      user: null,
+      tokens: null,
+      isLoading: true,
+      isAuthenticated: false,
+      login: () => {},
+      logout: () => {},
+      updateUser: () => {}
+    };
   }
   
   return context;
