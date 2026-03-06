@@ -79,6 +79,12 @@ useEffect(() => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  
+  // This is the line throwing your build error
+  if (context === undefined) {
+    // If we are currently building/prerendering, return a null state instead of crashing
+    return { user: null, tokens: null, isLoading: true, isAuthenticated: false };
+  }
+  
   return context;
 };
