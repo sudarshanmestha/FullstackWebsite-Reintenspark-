@@ -34,20 +34,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    const loadAuth = async () => {
-      const storedTokens = getTokens();
-      const storedUser = getUser();
+useEffect(() => {
+  const loadAuth = async () => {
+    // Ensure we only run this in the browser
+    if (typeof window === "undefined") return;
 
-      if (storedTokens?.access) {
-        setTokens(storedTokens);
-        if (storedUser) setUser(storedUser);
-        await fetchUser(storedTokens.access);
-      }
-      setIsLoading(false);
-    };
-    loadAuth();
-  }, []);
+    const storedTokens = getTokens();
+    const storedUser = getUser();
+
+    if (storedTokens?.access) {
+      setTokens(storedTokens);
+      if (storedUser) setUser(storedUser);
+      await fetchUser(storedTokens.access);
+    }
+    setIsLoading(false);
+  };
+  loadAuth();
+}, []);
 
   const login = (newTokens: Tokens, userData: User) => {
     saveTokens(newTokens);
