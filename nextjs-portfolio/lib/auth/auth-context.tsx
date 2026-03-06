@@ -81,8 +81,8 @@ useEffect(() => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  // If the context is missing (like during the static build/prerendering), 
-  // return a safe empty state instead of throwing a hard error.
+  // If the context is undefined (common during static build/prerendering),
+  // return a safe fallback object instead of throwing a hard Error.
   if (context === undefined) {
     return {
       user: null,
