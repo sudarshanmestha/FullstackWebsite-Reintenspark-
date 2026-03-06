@@ -103,8 +103,8 @@ const updateUser = async (data: Partial<User>) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  // If the context is missing (common during static build/prerendering), 
-  // return a safe empty object instead of throwing a hard error.
+  // If the context is missing (common during the isolated static build phase), 
+  // return a safe fallback instead of throwing a hard error.
   if (context === undefined) {
     return {
       user: null,
