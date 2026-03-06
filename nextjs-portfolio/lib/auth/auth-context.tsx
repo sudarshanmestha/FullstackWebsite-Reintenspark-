@@ -77,11 +77,12 @@ useEffect(() => {
   );
 };
 
+// lib/AuthContext.tsx
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  // If the context is missing (like during a build), 
-  // return a safe empty object instead of throwing an error.
+  // If the context is missing (like during the static build/prerendering), 
+  // return a safe empty state instead of throwing a hard error.
   if (context === undefined) {
     return {
       user: null,
