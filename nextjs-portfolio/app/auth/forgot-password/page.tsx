@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useAuth } from "@/lib/AuthContext";
 import { api } from '@/lib/api';
 import Link from 'next/link';
 
@@ -27,69 +28,75 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="w-full max-w-md p-8 rounded-lg" style={{ backgroundColor: '#2f3136' }}>
-      <h1 className="text-3xl font-bold mb-6 text-center" style={{ color: '#e1e1e1' }}>
-        Forgot Password
-      </h1>
+    /* Outer container restores the centering and #202225 background lost from auth/layout.tsx */
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#202225] py-12 px-4">
+      
+      <div className="w-full max-w-md p-8 rounded-2xl border border-[#39FF14]/10 bg-black/60 backdrop-blur-xl shadow-2xl">
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">
+          Forgot <span className="text-[#39FF14]">Password</span>
+        </h1>
 
-      {error && (
-        <div className="mb-4 p-3 rounded text-sm" style={{ backgroundColor: '#ff635f1f', color: '#ff5b5b' }}>
-          {error}
-        </div>
-      )}
-
-      {success ? (
-        <div className="text-center">
-          <div className="mb-4 p-4 rounded" style={{ backgroundColor: '#10b9811f', color: '#10b981' }}>
-            Password reset email sent! Check your inbox.
+        {error && (
+          <div className="mb-4 p-3 rounded-lg border border-red-500/20 bg-red-500/10 text-red-500 text-sm">
+            {error}
           </div>
-          <Link href="/auth/login" className="text-sm" style={{ color: '#627eff' }}>
-            Back to Login
-          </Link>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <p className="text-sm mb-4" style={{ color: '#c3c3c3' }}>
-            Enter your email address and we'll send you a link to reset your password.
-          </p>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded border focus:outline-none focus:ring-2"
-              style={{
-                backgroundColor: '#202225',
-                borderColor: '#3a3a3a',
-                color: '#e1e1e1',
-              }}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded font-semibold transition-all"
-            style={{
-              background: loading ? '#3a3a3a' : 'linear-gradient(135deg, #627eff 0%, #8b5cf6 100%)',
-              color: '#ffffff',
-            }}
-          >
-            {loading ? 'Sending...' : 'Send Reset Link'}
-          </button>
-
-          <div className="text-center">
-            <Link href="/auth/login" className="text-sm" style={{ color: '#627eff' }}>
+        {success ? (
+          <div className="text-center space-y-6">
+            <div className="p-4 rounded-lg border border-[#39FF14]/20 bg-[#39FF14]/10 text-[#39FF14] text-sm">
+              Password reset email sent! Please check your inbox.
+            </div>
+            <Link 
+              href="/auth/login" 
+              className="inline-block text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-[#39FF14] transition-colors"
+            >
               Back to Login
             </Link>
           </div>
-        </form>
-      )}
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <p className="text-sm text-neutral-400 leading-relaxed">
+              Enter your registered email address and we'll send you a secure link to reset your password.
+            </p>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="pilot@reintenspark.com"
+                className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-4 rounded-full font-bold uppercase tracking-widest transition-all ${
+                loading 
+                  ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed' 
+                  : 'bg-[#39FF14] text-black hover:shadow-[0_0_25px_rgba(57,255,20,0.5)] active:scale-95'
+              }`}
+            >
+              {loading ? 'Sending Request...' : 'Send Reset Link'}
+            </button>
+
+            <div className="text-center">
+              <Link 
+                href="/auth/login" 
+                className="text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-[#39FF14] transition-colors"
+              >
+                Back to Login
+              </Link>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

@@ -21,14 +21,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      // Check if we are in the browser before touching localStorage
+      // SSR Safety: Check for window before touching localStorage
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('access_token');
         if (token) {
           try {
+            // Validating token with your Django backend
             const userData = await api.getCurrentUser();
             setUser(userData);
           } catch (error) {
+            console.error("Session expired or invalid token");
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
           }
@@ -36,7 +38,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       setLoading(false);
     };
-
     initAuth();
   }, []);
 
@@ -72,13 +73,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-const updateUser = async (data: Partial<User>) => {
+  const updateUser = async (data: Partial<User>) => {
     try {
       const updatedUser = await api.updateProfile(data);
       setUser(updatedUser);
     } catch (error) {
       console.error('Failed to update user:', error);
-      throw error; // Re-throw so the UI (Profile Page) can show an error message
+      throw error;
     }
   };
 
@@ -99,22 +100,20 @@ const updateUser = async (data: Partial<User>) => {
   );
 }
 
-// lib/AuthContext.tsx
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  // This prevents the "Prerender Error" on Vercel
+  // Vercel Build-Safe Fallback: Prevents prerender crash if Provider isn't found during static generation
   if (context === undefined) {
     return {
       user: null,
-      tokens: null,
-      isLoading: true,
+      loading: true,
       isAuthenticated: false,
-      login: () => {},
-      logout: () => {},
-      updateUser: () => {}
+      login: async () => {},
+      register: async () => {},
+      logout: async () => {},
+      updateUser: async () => {},
     };
   }
-  
   return context;
 };

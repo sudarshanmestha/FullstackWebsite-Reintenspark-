@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/AuthContext';
+import { useAuth } from "@/lib/AuthContext";
 import Link from 'next/link';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, isAuthenticated } = useAuth();
+  const { register, isAuthenticated, loading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -21,7 +21,8 @@ export default function RegisterPage() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/courses');
+      // Updated to redirect to home or dashboard instead of /courses
+      router.push('/');
     }
   }, [isAuthenticated, router]);
 
@@ -43,7 +44,7 @@ export default function RegisterPage() {
 
     try {
       await register(formData);
-      router.push('/courses');
+      router.push('/');
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
@@ -52,159 +53,135 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-md p-8 rounded-lg" style={{ backgroundColor: '#2f3136' }}>
-      <div className="text-center mb-8">
-        <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 rounded flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #627eff 0%, #8b5cf6 100%)' }}>
-            <span className="text-white font-bold text-2xl">JP</span>
+    /* Outer container restores the centering and background lost from auth/layout.tsx */
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#202225] py-12 px-4">
+      
+      <div className="w-full max-w-md p-8 rounded-2xl border border-[#39FF14]/10 bg-black/60 backdrop-blur-xl shadow-2xl">
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            {/* ReintenSpark Branding */}
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.4)]">
+              <span className="text-black font-black text-2xl">RS</span>
+            </div>
           </div>
+          <h1 className="text-3xl font-bold text-white">
+            Join <span className="text-[#39FF14]">ReintenSpark</span>
+          </h1>
+          <p className="mt-2 text-neutral-400 text-sm uppercase tracking-widest font-medium">
+            Innovation in Drones & AI
+          </p>
         </div>
-        <h1 className="text-3xl font-bold" style={{ color: '#e1e1e1' }}>
-          Create Account
-        </h1>
-        <p className="mt-2" style={{ color: '#c3c3c3' }}>
-          Start your learning journey today
+
+        {error && (
+          <div className="mb-4 p-3 rounded-lg border border-red-500/20 bg-red-500/10 text-red-500 text-sm">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+                First Name
+              </label>
+              <input
+                type="text"
+                value={formData.first_name}
+                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+                placeholder="John"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+                Last Name
+              </label>
+              <input
+                type="text"
+                value={formData.last_name}
+                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+                placeholder="Doe"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+              Username *
+            </label>
+            <input
+              type="text"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+              placeholder="reinten_pilot"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+              Email *
+            </label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+              placeholder="pilot@reintenspark.com"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+              Password *
+            </label>
+            <input
+              type="password"
+              value={formData.password1}
+              onChange={(e) => setFormData({ ...formData, password1: e.target.value })}
+              className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-widest mb-2 text-neutral-400">
+              Confirm Password *
+            </label>
+            <input
+              type="password"
+              value={formData.password2}
+              onChange={(e) => setFormData({ ...formData, password2: e.target.value })}
+              className="w-full px-4 py-3 rounded-lg border border-neutral-700 bg-[#202225] text-white focus:border-[#39FF14] outline-none transition-all"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-4 rounded-full font-bold uppercase tracking-widest transition-all mt-4 ${
+              loading 
+                ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed' 
+                : 'bg-[#39FF14] text-black hover:shadow-[0_0_25px_rgba(57,255,20,0.5)] active:scale-95'
+            }`}
+          >
+            {loading ? 'Initializing...' : 'Create Account'}
+          </button>
+        </form>
+
+        <p className="mt-8 text-center text-sm text-neutral-400">
+          Already a member?{' '}
+          <Link href="/auth/login" className="font-bold text-[#39FF14] hover:underline transition-all">
+            Login here
+          </Link>
         </p>
       </div>
-
-      {error && (
-        <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#ff635f1f', color: '#ff5b5b' }}>
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-            Username *
-          </label>
-          <input
-            type="text"
-            value={formData.username}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-            className="w-full px-4 py-3 rounded border focus:outline-none focus:ring-2"
-            style={{
-              backgroundColor: '#202225',
-              borderColor: '#3a3a3a',
-              color: '#e1e1e1',
-            }}
-            placeholder="Choose a username"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-            Email
-          </label>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-4 py-3 rounded border focus:outline-none focus:ring-2"
-            style={{
-              backgroundColor: '#202225',
-              borderColor: '#3a3a3a',
-              color: '#e1e1e1',
-            }}
-            placeholder="your.email@example.com"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-              First Name
-            </label>
-            <input
-              type="text"
-              value={formData.first_name}
-              onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-              className="w-full px-4 py-3 rounded border focus:outline-none focus:ring-2"
-              style={{
-                backgroundColor: '#202225',
-                borderColor: '#3a3a3a',
-                color: '#e1e1e1',
-              }}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-              Last Name
-            </label>
-            <input
-              type="text"
-              value={formData.last_name}
-              onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-              className="w-full px-4 py-3 rounded border focus:outline-none focus:ring-2"
-              style={{
-                backgroundColor: '#202225',
-                borderColor: '#3a3a3a',
-                color: '#e1e1e1',
-              }}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-            Password *
-          </label>
-          <input
-            type="password"
-            value={formData.password1}
-            onChange={(e) => setFormData({ ...formData, password1: e.target.value })}
-            className="w-full px-4 py-3 rounded border focus:outline-none focus:ring-2"
-            style={{
-              backgroundColor: '#202225',
-              borderColor: '#3a3a3a',
-              color: '#e1e1e1',
-            }}
-            placeholder="At least 8 characters"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#c3c3c3' }}>
-            Confirm Password *
-          </label>
-          <input
-            type="password"
-            value={formData.password2}
-            onChange={(e) => setFormData({ ...formData, password2: e.target.value })}
-            className="w-full px-4 py-3 rounded border focus:outline-none focus:ring-2"
-            style={{
-              backgroundColor: '#202225',
-              borderColor: '#3a3a3a',
-              color: '#e1e1e1',
-            }}
-            placeholder="Repeat your password"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 rounded font-semibold transition-all"
-          style={{
-            background: loading ? '#3a3a3a' : 'linear-gradient(135deg, #627eff 0%, #8b5cf6 100%)',
-            color: '#ffffff',
-            cursor: loading ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {loading ? 'Creating account...' : 'Create Account'}
-        </button>
-      </form>
-
-      <p className="mt-6 text-center" style={{ color: '#c3c3c3' }}>
-        Already have an account?{' '}
-        <Link href="/auth/login" className="font-semibold" style={{ color: '#627eff' }}>
-          Login
-        </Link>
-      </p>
     </div>
   );
 }
