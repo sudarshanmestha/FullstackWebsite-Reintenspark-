@@ -42,18 +42,18 @@ export default function Navbar() {
         <div className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? 'py-3' : 'py-5'}`}>
           
           {/* LOGO */}
-          <div className="relative flex-shrink-0 pr-10 flex items-center justify-center min-w-[240px]">
-            <Link href="/" className="relative z-10 block">
-              <Image 
-                alt="Reintenspark logo" 
-                src="/icons/reinternspark-logo.svg" 
-                width={isScrolled ? 240 : 300}
-                height={75}
-                className="object-contain transition-all duration-500 dark:brightness-100 brightness-90"
-                priority
-              />
-            </Link>
-          </div>
+<div className="relative flex-shrink-0 flex items-center min-w-[180px] sm:min-w-[240px]">
+  <Link href="/" className="relative z-10 block">
+    <Image 
+      alt="Reintenspark logo" 
+      src="/icons/reinternspark-logo.svg" 
+      width={isScrolled ? 200 : 240} // Reduced size for mobile
+      height={60}
+      className="object-contain transition-all duration-500"
+      priority
+    />
+  </Link>
+</div>
 
           {/* MOBILE & DESKTOP NAVIGATION */}
           {/* On mobile, this div covers the screen when visibleNav is true */}

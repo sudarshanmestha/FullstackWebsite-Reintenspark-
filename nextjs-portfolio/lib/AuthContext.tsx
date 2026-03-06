@@ -99,10 +99,23 @@ const updateUser = async (data: Partial<User>) => {
   );
 }
 
-export function useAuth() {
+// lib/AuthContext.tsx
+export const useAuth = () => {
   const context = useContext(AuthContext);
+  
+  // If the context is missing (common during static build/prerendering), 
+  // return a safe empty object instead of throwing a hard error.
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    return {
+      user: null,
+      tokens: null,
+      isLoading: true,
+      isAuthenticated: false,
+      login: () => {},
+      logout: () => {},
+      updateUser: () => {}
+    };
   }
+  
   return context;
-}
+};
